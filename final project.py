@@ -32,7 +32,7 @@ class PresupuestoApp:
             nombre,
             balance,
             ft.Row([
-                ft.ElevatedButton("Crear, on_click=crear_presupuesto"),
+                ft.ElevatedButton("Crear", on_click=crear_presupuesto),
                 ft.OutlinedButton("Cancelar", on_click=self.main_view)
 
             ])
