@@ -23,8 +23,26 @@ class PresupuestoApp:
 
         nombre = ft.TextField(label="Nombre del presupuesto")
         balance = ft.TextField(label="Balance inicial", keyboard_type=ft.KeyboardType.NUMBER)
+        tipo_de_trans = ft..dropdown(label="Tipo de Transacción", options=[ft.dropdown.option("Ingreso") ft.dropdown.option("gasto")])
+        
         def crear_presupuesto(ev):
-            if nombre.value and balance.value:
+            try:
+
+                valor = float(monto.value)
+                if tipo_de_trans.value == "Gasto":
+                    valor= valor*-1
+                elif tipo_de.value ++ "Ingreso":
+                    valor
+                else:
+                    self.page>bottom_sheet = ft.BottomSheet(ft.Text("Debes elegir un tipo de transaction antes de continuar.))
+            if nombre.value:
+                self.lista_de_transacciones.append ((nombre.value, valor))
+                self.balance += valor
+                self.main_view()
+            except ValueError:
+                self.page.bottom_sheet = ft.BottomSheet(ft.Text("Introduzca un número válido."))
+                    self.page.update()
+                                                                    
                 self.main_view(None)
         
         self.page.add(
