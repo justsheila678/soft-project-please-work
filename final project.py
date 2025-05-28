@@ -10,10 +10,10 @@ class PresupuestoApp:
         self.page.vertical_alignment = "start"
         self.main_view()
 
-def main_view(self, e=None):
-    self.page.controls.clear()
-    titulo = ft.text("Menú Principal", size=30, weight="bold"
-    btn_nuevo = ft.ElevatedButton("Agregar nuevo Presupuesto"), on_click=self.nuevo_presupuesto_view)
-    btn_lista = ft.ElevatedButton ("Listar Presupuestos", on_click=self.listar_presupuestos_view)
-    self.page.add.(titulo,btn_nuevo, btn_lista)
-    self.page.update()
+    def main_view(self, e=None):
+        self.page.controls.clear()
+        titulo = ft.Text("Menú Principal", size=30, weight="bold")
+        btn_nuevo = ft.ElevatedButton(("Agregar nuevo Presupuesto"), on_click=self.nuevo_presupuesto_view)
+        btn_lista = ft.ElevatedButton ("Listar Presupuestos", on_click=self.listar_presupuestos_view)
+        self.page.add(titulo,btn_nuevo, btn_lista)
+        self.page.update()
