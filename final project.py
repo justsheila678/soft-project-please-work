@@ -17,3 +17,24 @@ def main_view(self, e=None):
     btn_lista = ft.ElevatedButton ("Listar Presupuestos", on_click=self.listar_presupuestos_view)
     self.page.add.(titulo,btn_nuevo, btn_lista)
     self.page.update()
+
+def nuevo_presupuesto_view(self, e);
+    self.page.controls.clear()
+
+    nombre = ft.TextField(label="Nombre del presupuesto")
+    balance = ft.TextField(label="Balance inicial", keyboard_type=ft.KeyboardType.NUMBER)
+    def crear_presupuesto(ev):
+        if nombre.value and balance.value;
+            self.main_view(None)
+    self.page.add(
+        ft.Text("Nuevo Presupuesto", size=25, weight="bold"),
+        nombre,
+        balance,
+        ft.Row([
+            ft.ElevatedButton("Crear, on_click=crear_presupuesto),
+            ft.OutlinedButton(Cancerlar, on_click=self.main_view)
+
+        ])
+
+    )
+    self.page.update()
