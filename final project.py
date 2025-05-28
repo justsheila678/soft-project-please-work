@@ -8,6 +8,8 @@ class PresupuestoApp:
         self.page.window_height = 600
         self.page.horizontal_alignment = "center"
         self.page.vertical_alignment = "start"
+        self.balance = 0.0
+        self.lista_de_transacciones = []
         self.main_view()
    
     def main_view(self, e=None):
@@ -57,7 +59,12 @@ class PresupuestoApp:
     
     def listar_presupuestos_view(self, e):
         self.page.controls.clear()
-        self.page.add(ft.Text("Presupuestos Registrados"))
+        self.page.add(ft.Text("Historial de Transacciones", size=25, weight="bold"))
+
+        if not self.lista_de_transacciones:
+            self.page.add(
+                ft.Text(f"{descripcion}: ${monto}")
+            )
 
         self.page.add(ft.OutlinedButton("Volver al Menú", on_click=self.main_view))
         self.page.update()
