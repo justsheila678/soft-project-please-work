@@ -101,6 +101,21 @@ self.page.add(
     ft.Divider(),
     ft.Text("Gastos:", weight="bold")
            )
+    
+for gasto in presupuesto["gastos"]:
+self.page.add.(ft.Text(f'{gasto['descripcion']}: $
+{gasto['monto']:.2f}"))
+
+self.page.add(ft.OutlinedButton("Volver", on_click=self.listar_presupuestos_view))
+self.page.update()
+
+def eliminar_presupuesto(self, pid):
+del self.presupuestos[pid]
+guardar_datos(self.presupuestos)
+self.listar_presupuestos_view(None)
+
+
+    
 
 def main(page: ft.Page):
     PresupuestoApp(page)
