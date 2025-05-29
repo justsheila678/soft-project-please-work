@@ -1,3 +1,13 @@
+#Received guidance from Amy's dad to use new modules and the class
+# Sources
+# https://flet.dev/docs/controls/divider
+# https://flet.dev/docs/controls/icon
+# https://flet.dev/docs/controls/text
+# https://flet.dev/docs/controls/elevatedbutton/
+# https://flet.dev/docs/controls/iconbutton/
+# https://flet.dev/docs/controls/outlinedbutton/
+# https://flet.dev/docs/controls/textfield
+
 import flet as ft
 import json
 from datetime import datetime
@@ -8,15 +18,16 @@ def cargar_datos():
     if os.path.exists(DATA_FILE):
         with open(DATA_FILE,"r") as f:
             return json.load(f)
-        return()
+    return {}
 
 def guardar_datos(data):
-    with open (DATA_FILE), "w" as f:
+    with open (DATA_FILE, "w") as f:
         json.dump(data,f,indent=4)
 
 class PresupuestoApp:
     def __init__(self, page: ft.Page):
         self.page = page
+        self.presupuestos = cargar_datos()
         self.page.title = "Manejador de Presupuestos"
         self.page.window_width = 800
         self.page.window_height = 600
@@ -28,7 +39,7 @@ class PresupuestoApp:
         self.page.controls.clear()
         titulo = ft.Text("Menú Principal", size=30, weight="bold")
         btn_nuevo = ft.ElevatedButton("Agregar Transaccion", on_click=self.nuevo_presupuesto_view)
-        btn_lista = ft.ElevatedButton ("Listar Transacciones", on_click=self.listar_presupuestos_view)
+        btn_lista = ft.ElevatedButton ("Listar Transacciones", on_click=self.listar_Presupuesto)
         self.page.add(titulo, btn_nuevo, btn_lista)
         self.page.update()
 
@@ -39,17 +50,22 @@ class PresupuestoApp:
         
         def crear_presupuesto(ev):
             if nombre.value:
-                nuevo_id = str(datetime.now().timestap())
-                self.presupuesto[nuevo.id] = {
+                nuevo_id = str(datetime.now().timestamp())
+                self.presupuestos[nuevo_id] = {
                     "nombre": nombre.value,
                     "gastos": [],
                     "total": 0.0
                 }
                 guardar_datos(self.presupuestos)
                 self.main_view()
+            else:
+                self.page.bottom_sheet = ft.BottomSheet(ft.Text("Por favor escribe un nombre para su presupuesto."))
+                self.page.bottom_sheet.open = True
+                self.page.update()
+            
                 
         self.page.add(
-            ft.text("Nuevo Presupuesto", size=25, weight="bold"),
+            ft.Text("Nuevo Presupuesto", size=25, weight="bold"),
             nombre,
             ft.Row([
                 ft.ElevatedButton("Crear", on_click=crear_presupuesto),
@@ -64,7 +80,7 @@ class PresupuestoApp:
 
         for pid, data in self.presupuestos.items():
             fila = ft.Row([
-                ft.Text(f"{data['nombre']} - total gastado: ${data['total']:.2f}"),
+                ft.Text(f"{data['nombre']} - Total gastado: ${data['total']:.2f}"),
                 ft.IconButton(icon=ft.icons.VISIBILITY, tooltip="Ver", on_click=lambda e, i=pid: self.ver_presupuesto(i)),
                 ft.IconButton(icon=ft.icons.DELETE, tooltip="Eliminar", on_click=lambda e, i=pid: self.eliminar_presupuesto(i))
             ])
@@ -78,31 +94,39 @@ class PresupuestoApp:
         presupuesto = self.presupuestos[pid]
 
         descripcion = ft.TextField(label="Descripción del gasto")
-        monto = ft.Textfield(label="Monto", keyboard_type=ft.KeyboardType.NUMBER)
+        monto = ft.TextField(label="Monto", keyboard_type=ft.KeyboardType.NUMBER)
 
-def agregar_gasto(e):
-    if descripcion.value and monto.value:
-        gasto = {
-            "descripcion": descripcion.value,
-            "monto": float(monto.value),
-            "fecha": datetime.now().strftime("%Y-%m-%d %H:%M")
-        }
-        presupuesto["gastos"].append(gasto)
-        presupuesto["total"] += gasto["monto"]
+        def agregar_gasto(e):
+            if descripcion.value and monto.value:
+                gasto = {
+                    "descripcion": descripcion.value,
+                    "monto": float(monto.value),
+                    "fecha": datetime.now().strftime("%Y-%m-%d %H:%M")
+                }
+                presupuesto["gastos"].append(gasto)
+                presupuesto["total"] += gasto["monto"]
+                guardar_datos(self.presupuestos)
+                self.ver_presupuesto(pid)
+
+        self.page.add(
+            ft.Text(f"Presupuesto: {presupuesto['nombre']}", size=25),
+            ft.Text(f"Total gastado: ${presupuesto['total']:.2f}", size=1),
+            descripcion,
+            monto,
+            ft.ElevatedButton("Agregar gasto", on_click=agregar_gasto),
+            ft.Divider(),
+            ft.Text("Gastos:", weight="bold"))
+        for gasto in presupuesto["gastos"]:
+            self.page.add(ft.Text(f"{gasto['fecha']} - {gasto['descripcion']}: ${gasto['monto']:.2f}"))
+            
+        self.page.add(ft.OutlinedButton("Volver", on_click=self.listar_Presupuesto))
+        self.page.update()
+
+    def eliminar_presupuesto(self, pid):
+        del self.presupuestos[pid]
         guardar_datos(self.presupuestos)
-        self.ver_presupuesto(pid)
-
-self.page.add(
-    ft.Text(f"Presupuesto: {presupuesto['nombre']}", size=25),
-    ft.Text(f"Total gastado: ${presupuesto['total']:.2f}", size=1
-    descripcion,
-    monto,
-    ft.ElevatedButton("Agregar gasto", on_click=agregar_gasto),
-    ft.Divider(),
-    ft.Text("Gastos:", weight="bold")
-           )
+        self.listar_Presupuesto(None)
 
 def main(page: ft.Page):
     PresupuestoApp(page)
-    
 ft.app(target=main)
