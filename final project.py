@@ -76,7 +76,7 @@ class PresupuestoApp:
 
     def listar_Presupuesto(self, e):
         self.page.controls.clear()
-        self.page.add(ft.Text("Presupuestos registrados", size=25, weight="bold"))
+        self.page.add(ft.Text("Presupuestos Registrados", size=25, weight="bold"))
 
         for pid, data in self.presupuestos.items():
             fila = ft.Row([
@@ -97,20 +97,29 @@ class PresupuestoApp:
         monto = ft.TextField(label="Monto", keyboard_type=ft.KeyboardType.NUMBER)
 
         def agregar_gasto(e):
-            if descripcion.value and monto.value:
-                gasto = {
-                    "descripcion": descripcion.value,
-                    "monto": float(monto.value),
-                    "fecha": datetime.now().strftime("%Y-%m-%d %H:%M")
-                }
-                presupuesto["gastos"].append(gasto)
-                presupuesto["total"] += gasto["monto"]
-                guardar_datos(self.presupuestos)
-                self.ver_presupuesto(pid)
+            if descripcion.value:
+                if monto.value:
+                    gasto = {
+                        "descripcion": descripcion.value,
+                        "monto": float(monto.value),
+                        "fecha": datetime.now().strftime("%Y-%m-%d %H:%M")
+                    }
+                    presupuesto["gastos"].append(gasto)
+                    presupuesto["total"] += gasto["monto"]
+                    guardar_datos(self.presupuestos)
+                    self.ver_presupuesto(pid)
+                else: 
+                    self.page.bottom_sheet = ft.BottomSheet(ft.Text("Por favor escribe un monto."))
+                    self.page.bottom_sheet.open = True
+                    self.page.update()
+            else:
+                self.page.bottom_sheet = ft.BottomSheet(ft.Text("Por favor escribe un descripción."))
+                self.page.bottom_sheet.open = True
+                self.page.update()
 
         self.page.add(
             ft.Text(f"Presupuesto: {presupuesto['nombre']}", size=25),
-            ft.Text(f"Total gastado: ${presupuesto['total']:.2f}", size=1),
+            ft.Text(f"Total gastado: ${presupuesto['total']:.2f}", size=15),
             descripcion,
             monto,
             ft.ElevatedButton("Agregar gasto", on_click=agregar_gasto),
