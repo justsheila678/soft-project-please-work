@@ -3,6 +3,7 @@ import json
 from datetime import datetime
 import os
 
+DATA_FILE = "presupuesto.json"
 def cargar_datos():
     if os.path.exists(DATA_FILE):
         with open(DATA_FILE,"r") as f:
@@ -33,18 +34,22 @@ class PresupuestoApp:
     def nuevo_presupuesto_view(self, e):
         self.page.controls.clear()
 
-        nombre = ft.TextField(label="Descripcion de Transaccion")
-        monto = ft.TextField(label="Monto", keyboard_type=ft.KeyboardType.NUMBER)
-    
-        def crear_presupuesto(ev):
-            
-            if nombre.value and monto.value:
-                self.main_view()                                                          
+        nombre = ft.TextField(label="Nombre del presupuesto")
         
+        def crear_presupuesto(ev):
+            if nombre.value:
+                nuevo_id = str(datetime.now().timestap())
+                self.presupuesto[nuevo.id] = {
+                    "nombre": nombre.value,
+                    "gastos": [],
+                    "total": 0.0
+                }
+                guardar_datos(self.presupuestos)
+                self.main_view()
+                
         self.page.add(
-            ft.Text("Nuevo Presupuesto", size=25, weight="bold"),
+            ft.text("Nuevo Presupuesto", size=25, weight="bold"),
             nombre,
-            monto,
             ft.Row([
                 ft.ElevatedButton("Crear", on_click=crear_presupuesto),
                 ft.OutlinedButton("Cancelar", on_click=self.main_view)
@@ -52,15 +57,20 @@ class PresupuestoApp:
             ])
         )
         self.page.update()
-    
-    def listar_presupuestos_view(self, e):
-        self.page.controls.clear()
-        self.page.add(ft.Text("Historial de Transacciones", size=25, weight="bold"))
- 
-        self.page.add(ft.OutlinedButton("Volver al Menú", on_click=self.main_view))
-        self.page.update()
 
-def main(page: ft.Page):
-    PresupuestoApp(page)
+def listar_Presupuesto(self, e):
+    self.page.controls.clear()
+    self.page.add(ft.Text("Presupuestos registrados", size=25, weight="bold"))
 
+    for pid, data in self.presupuestos.items():
+        fila = ft.Row([
+            ft.Text(f"{data['nombre']} - total gastado: ${data['total']:.2f}"),
+            ft.IconButton(icon=ft.icons.VISIBILITY, tooltip="Ver", on_click=lambda e, i=ipid: self.ver_presupuesto(i)),
+            ft.IconButton(icon=ft.icons.DELETE, tooltip="Eliminar", on_click=lambda e, i=pid: self.eliminar_presupuesto(i))
+        ])
+        self.page.add(fila)
+
+    self.page.add(ft.OutlinedButton("Volver al menú, on_click=self.main_view))
+    self.page.update()
+            
 ft.app(target=main)
