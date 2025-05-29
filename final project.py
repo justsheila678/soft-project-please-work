@@ -8,9 +8,10 @@ def cargar_datos():
     if os.path.exists(DATA_FILE):
         with open(DATA_FILE,"r") as f:
             return json.load(f)
+        return()
 
 def guardar_datos(data):
-    with open (DATA_FILE), "w") as f:
+    with open (DATA_FILE), "w" as f:
         json.dump(data,f,indent=4)
 
 class PresupuestoApp:
@@ -53,24 +54,33 @@ class PresupuestoApp:
             ft.Row([
                 ft.ElevatedButton("Crear", on_click=crear_presupuesto),
                 ft.OutlinedButton("Cancelar", on_click=self.main_view)
-
             ])
         )
         self.page.update()
 
-def listar_Presupuesto(self, e):
-    self.page.controls.clear()
-    self.page.add(ft.Text("Presupuestos registrados", size=25, weight="bold"))
+    def listar_Presupuesto(self, e):
+        self.page.controls.clear()
+        self.page.add(ft.Text("Presupuestos registrados", size=25, weight="bold"))
 
-    for pid, data in self.presupuestos.items():
-        fila = ft.Row([
-            ft.Text(f"{data['nombre']} - total gastado: ${data['total']:.2f}"),
-            ft.IconButton(icon=ft.icons.VISIBILITY, tooltip="Ver", on_click=lambda e, i=ipid: self.ver_presupuesto(i)),
-            ft.IconButton(icon=ft.icons.DELETE, tooltip="Eliminar", on_click=lambda e, i=pid: self.eliminar_presupuesto(i))
-        ])
-        self.page.add(fila)
+        for pid, data in self.presupuestos.items():
+            fila = ft.Row([
+                ft.Text(f"{data['nombre']} - total gastado: ${data['total']:.2f}"),
+                ft.IconButton(icon=ft.icons.VISIBILITY, tooltip="Ver", on_click=lambda e, i=pid: self.ver_presupuesto(i)),
+                ft.IconButton(icon=ft.icons.DELETE, tooltip="Eliminar", on_click=lambda e, i=pid: self.eliminar_presupuesto(i))
+            ])
+            self.page.add(fila)
 
-    self.page.add(ft.OutlinedButton("Volver al menú, on_click=self.main_view))
-    self.page.update()
-            
+        self.page.add(ft.OutlinedButton("Volver al menú", on_click=self.main_view))
+        self.page.update()
+    
+    def ver_presupuesto(self, pid):
+        self.page.controls.clear()
+        presupuesto = self.presupuestos[pid]
+
+        descripcion = ft.TextField(label="Descripción del gasto")
+        monto = ft.Textfield(label="Monto", keyboard_type=ft.KeyboardType.NUMBER)
+
+def main(page: ft.Page):
+    PresupuestoApp(page)
+    
 ft.app(target=main)
