@@ -59,10 +59,14 @@ class PresupuestoApp:
                 guardar_datos(self.presupuestos)
                 self.main_view()
             else:
-                self.page.bottom_sheet = ft.BottomSheet(ft.Text("Por favor escribe un nombre para su presupuesto."))
-                self.page.bottom_sheet.open = True
+                bs = self.page.bottom_sheet = ft.BottomSheet(content=ft.Container(
+            padding=50,
+            content=ft.Column(tight=True,
+                controls=[
+                    ft.Text("Escribe un nombre para su presupuesto."),
+                    ft.OutlinedButton("Cerrar", on_click=lambda _: self.page.close(bs)),],),),)
+                bs.open = True
                 self.page.update()
-            
                 
         self.page.add(
             ft.Text("Nuevo Presupuesto", size=25, weight="bold"),
@@ -109,12 +113,22 @@ class PresupuestoApp:
                     guardar_datos(self.presupuestos)
                     self.ver_presupuesto(pid)
                 else: 
-                    self.page.bottom_sheet = ft.BottomSheet(ft.Text("Por favor escribe un monto."))
-                    self.page.bottom_sheet.open = True
-                    self.page.update()
+                    bsthree = self.page.bottom_sheet = ft.BottomSheet(content=ft.Container(
+            padding=50,
+            content=ft.Column(tight=True,
+                controls=[
+                    ft.Text("Escribe un monto."),
+                    ft.OutlinedButton("Cerrar", on_click=lambda _: self.page.close(bsthree)),],),),)
+                bsthree.open = True
+                self.page.update()
             else:
-                self.page.bottom_sheet = ft.BottomSheet(ft.Text("Por favor escribe un descripción."))
-                self.page.bottom_sheet.open = True
+                bstwo = self.page.bottom_sheet = ft.BottomSheet(content=ft.Container(
+            padding=50,
+            content=ft.Column(tight=True,
+                controls=[
+                    ft.Text("Escribe un descripción."),
+                    ft.OutlinedButton("Cerrar", on_click=lambda _: self.page.close(bstwo)),],),),)
+                bstwo.open = True
                 self.page.update()
 
         self.page.add(

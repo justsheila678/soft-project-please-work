@@ -1,13 +1,1 @@
-{
-    "1748515827.948095": {
-        "nombre": "Viaje a Europa",
-        "gastos": [
-            {
-                "descripcion": "Pizza",
-                "monto": 100.0,
-                "fecha": "2025-05-29 06:52"
-            }
-        ],
-        "total": 100.0
-    }
-}
+{}
