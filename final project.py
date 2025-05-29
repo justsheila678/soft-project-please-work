@@ -3,6 +3,15 @@ import json
 from datetime import datetime
 import os
 
+def cargar_datos():
+    if os.path.exists(DATA_FILE):
+        with open(DATA_FILE,"r") as f:
+            return json.load(f)
+
+def guardar_datos(data):
+    with open (DATA_FILE), "w") as f:
+        json.dump(data,f,indent=4)
+
 class PresupuestoApp:
     def __init__(self, page: ft.Page):
         self.page = page
