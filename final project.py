@@ -8,7 +8,7 @@ class PresupuestoApp:
         self.page.window_height = 600
         self.page.horizontal_alignment = "center"
         self.page.vertical_alignment = "start"
-        self.balance = 0.0
+        self.balancee = 0.0
         self.lista_de_transacciones = []
         self.main_view()
    
@@ -65,7 +65,7 @@ class PresupuestoApp:
             self.page.add(
                 ft.Text(f"{descripcion}: ${monto}")
             )
-
+ 
         self.page.add(ft.OutlinedButton("Volver al Menú", on_click=self.main_view))
         self.page.update()
 
